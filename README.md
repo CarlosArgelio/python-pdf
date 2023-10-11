@@ -1,3 +1,7 @@
+# Working in project
+
+![Esta es una imagen de ejemplo](assets/remote-working.png)
+
 # RUN DOCKER
 
 Para ingresar a la terminal del contenedor, puedes usar el siguiente comando:
