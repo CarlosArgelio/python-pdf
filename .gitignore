@@ -247,4 +247,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+#bin
+wkhtmltopdf
+
 # End of https://www.toptal.com/developers/gitignore/api/linux,windows,macos,python
