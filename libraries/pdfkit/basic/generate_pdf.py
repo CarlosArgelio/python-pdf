@@ -1,4 +1,5 @@
 import pdfkit
+import bs4
 
 class GenerateReport:
     def __init__(self, watermark: bool, logo, name, info, html) -> None:
@@ -32,6 +33,11 @@ class GenerateReport:
 
         pages = len(self.info)
 
+        soup = bs4.BeautifulSoup(self.html, 'html.parser')
+        soup.insert(0, bs4.Tag('h1', text='Este es un título'))
+
+        self.html = soup.prettify()
+
     def create_pdf(self):
         if self.html is not None:
             pdf = pdfkit.from_string(self.html, f'{self.name}.pdf')
@@ -46,4 +52,5 @@ if __name__ == '__main__':
         html = f.read()
     
     report = GenerateReport(False, 'logo', 'name', '', html)
+    report.add_content()
     report.create_pdf()
