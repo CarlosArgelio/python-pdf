@@ -2,18 +2,37 @@ import pdfkit
 import bs4
 
 class GenerateReport:
-    def __init__(self, watermark: bool, logo, name, info, html) -> None:
+    def __init__(self, watermark: bool, logo, name, info) -> None:
         self.watermark = watermark
         self.logo = logo
         self.info = info
         self.name = name
-        self.html = html
+
+        with open('/home/carlos/work/projects/python/pdf/templates/static/informe.html', 'r') as f:
+            file = f.read()
+
+        self.html = file
+    
+    def soup_parse(self):
+        soup = bs4.BeautifulSoup(self.html, "html.parser")
+        return soup
+    
+    def get_label(self, label, value):
+        pass
+
+    def front_page(self):
+        pass
 
     def watermark(self):
         pass
 
     def logo(self):
-        pass
+        soup = self.soup_parse()
+        img = bs4.element.Tag("img", {"class": "logo", "src": "/home/assets/logo.png"})
+
+        # Agregar la etiqueta img al documento
+        soup.body.insert(0, img)
+        print(str(soup))
 
     def info(self):
         pass
@@ -31,12 +50,30 @@ class GenerateReport:
         ]
         """
 
-        pages = len(self.info)
+        # pages = len(self.info)
 
-        soup = bs4.BeautifulSoup(self.html, 'html.parser')
-        soup.insert(0, bs4.Tag('h1', text='Este es un título'))
+        content = [
+            {
+                'type': "front-page",
+                'label': 'h1',
+                'content': 'Report'
+            }
+        ]
 
-        self.html = soup.prettify()
+        soup = self.soup_parse()
+
+        h1_tags = soup.find_all("h1", text="Informe")
+
+        if h1_tags:
+            h1_tag = h1_tags[0]
+        else:
+            h1_tag = bs4.BeautifulSoup.new_tag(soup, "h1")
+            h1_tag.string = "Informe"
+            soup.body.insert(0, h1_tag)
+        
+        html = soup.prettify()
+
+        return html
 
     def create_pdf(self):
         if self.html is not None:
@@ -47,10 +84,12 @@ class GenerateReport:
 
 
 if __name__ == '__main__':
-
-    with open('/home/carlos/work/projects/python/pdf/templates/static/informe.html', 'r') as f:
-        html = f.read()
     
-    report = GenerateReport(False, 'logo', 'name', '', html)
-    report.add_content()
-    report.create_pdf()
+    report = GenerateReport(False, 'logo', 'name', '')
+    # my_report = report.add_content()
+
+    logo = report.logo()
+
+    # print(my_report)
+
+    # report.create_pdf()
