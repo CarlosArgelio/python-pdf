@@ -39,8 +39,8 @@ class Report():
 
     def add(self, release) -> None:
         self.report = release
-        print('REPORT')
-        print(self.report)
+        # print('REPORT')
+        # print(self.report)
 
     def __str__(self) -> None:
         return str()
@@ -57,7 +57,15 @@ class ConcreteReport(BuilderReport):
         with open('/home/carlos/work/projects/python/pdf/src/index.html', 'r') as f:
             report = f.read()
 
-        self.soup = bs4.BeautifulSoup(report, "html.parser")
+        self._soup = bs4.BeautifulSoup(report, "html.parser")
+
+    @property
+    def soup(self):
+        return self._soup
+
+    @soup.setter
+    def soup(self, soup):
+        self._soup = soup
 
     @property
     def report(self) -> Report:
@@ -67,13 +75,14 @@ class ConcreteReport(BuilderReport):
         return report
 
     def produce_logo(self, image: str = None) -> None:
-        img = self.soup.find_all("img")
+        img = self._soup.find_all("img")
         if image is not None:
             img[0]['src'] = image
 
         img[0]['src'] = "../../../assets/logo.avif"
 
-        html = self.soup.prettify()
+
+        html = self._soup.prettify()
 
         self.report.add(html)
 
@@ -197,6 +206,8 @@ if __name__ == '__main__':
     # Build pdf
 
     director.build_logo()
+
+    print(builder.soup)
 
 
 
