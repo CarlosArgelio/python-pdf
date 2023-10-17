@@ -26,13 +26,15 @@ class GenerateReport:
     def watermark(self):
         pass
 
-    def logo(self):
+    def add_logo(self):
         soup = self.soup_parse()
-        img = bs4.element.Tag("img", {"class": "logo", "src": "/home/assets/logo.png"})
 
-        # Agregar la etiqueta img al documento
-        soup.body.insert(0, img)
-        print(str(soup))
+        img = soup.find_all("img")
+        img[0]['src'] = "../../assets/logo.avif"
+
+        html = soup.prettify()
+
+        return html
 
     def info(self):
         pass
@@ -88,8 +90,8 @@ if __name__ == '__main__':
     report = GenerateReport(False, 'logo', 'name', '')
     # my_report = report.add_content()
 
-    logo = report.logo()
+    logo = report.add_logo()
 
-    # print(my_report)
+    print(logo)
 
     # report.create_pdf()
