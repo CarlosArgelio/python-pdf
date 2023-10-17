@@ -31,10 +31,16 @@ class BuilderReport():
 class Report():
 
     def __init__(self) -> None:
-        self.report = []
 
-    def add(self) -> None:
-        pass
+        with open('/home/carlos/work/projects/python/pdf/src/templates/reports/index.html', 'r') as f:
+            file = f.read()
+
+        self.report = file
+
+    def add(self, release) -> None:
+        self.report = release
+        print('REPORT')
+        print(self.report)
 
     def __str__(self) -> None:
         return str()
@@ -48,6 +54,11 @@ class ConcreteReport(BuilderReport):
     def reset(self) -> None:
         self._report = Report()
 
+        with open('/home/carlos/work/projects/python/pdf/src/index.html', 'r') as f:
+            report = f.read()
+
+        self.soup = bs4.BeautifulSoup(report, "html.parser")
+
     @property
     def report(self) -> Report:
 
@@ -55,8 +66,16 @@ class ConcreteReport(BuilderReport):
         self.reset()
         return report
 
-    def produce_logo(self) -> None:
-        pass
+    def produce_logo(self, image: str = None) -> None:
+        img = self.soup.find_all("img")
+        if image is not None:
+            img[0]['src'] = image
+
+        img[0]['src'] = "../../../assets/logo.avif"
+
+        html = self.soup.prettify()
+
+        self.report.add(html)
 
     def produce_date(self) -> None:
         pass
@@ -87,8 +106,8 @@ class Director:
     def report(self, builder: BuilderReport) -> None:
         self._report = builder
 
-    def build_report(self):
-        pass
+    def build_logo(self, logo: str = None):
+        self.report.produce_logo(logo)
 
 
 class GenerateReport:
@@ -115,16 +134,6 @@ class GenerateReport:
 
     def watermark(self):
         pass
-
-    def add_logo(self):
-        soup = self.soup_parse()
-
-        img = soup.find_all("img")
-        img[0]['src'] = "../../assets/logo.avif"
-
-        html = soup.prettify()
-
-        return html
 
     def info(self):
         pass
@@ -177,11 +186,25 @@ class GenerateReport:
 
 if __name__ == '__main__':
 
-    report = GenerateReport(False, 'logo', 'name', '')
-    # my_report = report.add_content()
+    # Create director
+    director = Director()
 
-    logo = report.add_logo()
+    # Create builder
+    builder = ConcreteReport()
 
-    print(logo)
+    director.report = builder
 
-    # report.create_pdf()
+    # Build pdf
+
+    director.build_logo()
+
+
+
+    # report = GenerateReport(False, 'logo', 'name', '')
+    # # my_report = report.add_content()
+
+    # logo = report.add_logo()
+
+    # print(logo)
+
+    # # report.create_pdf()
