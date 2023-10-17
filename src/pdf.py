@@ -103,6 +103,14 @@ class ConcreteReport(BuilderReport):
 
         html = self._soup.prettify()
 
+    def produce_front_page(self, title) -> None:
+        front_page = self._soup.find_all("h1")
+        for h1 in front_page:
+            if h1["class"] == ["title"]:
+                h1.string.replace_with(title)
+
+        html = self._soup.prettify()
+
     def produce_contact_information(self) -> None:
         pass
 
@@ -129,11 +137,10 @@ class Director:
     def report(self, builder: BuilderReport) -> None:
         self._report = builder
 
-    def build_logo(self, logo: str = None):
+    def build_test_report(self, logo: str = None):
         self.report.produce_logo(logo)
-
-    def build_date(self):
         self.report.produce_date()
+        self.report.produce_front_page('Titulo 1')
 
 
 if __name__ == '__main__':
@@ -148,12 +155,14 @@ if __name__ == '__main__':
 
     # Build pdf
 
-    director.build_logo()
-    director.build_date()
+    director.build_test_report()
 
     html = builder.soup
 
-    with open('/tmp/file.html', 'w') as f:
-        file = f.write(html.prettify())
+    # with open('/tmp/file.html', 'w') as f:
+    #     file = f.write(html.prettify())
 
-    pdfkit.from_file('/tmp/file.html', 'micro.pdf')
+    # with open('/tmp/file.html', 'r') as f:
+    #     f.read()
+
+    # pdfkit.from_file('/tmp/file.html', 'micro.pdf')
