@@ -41,8 +41,6 @@ class Report():
 
     def add(self, release) -> None:
         self.report = release
-        # print('REPORT')
-        # print(self.report)
 
     def __str__(self) -> None:
         return str()
@@ -100,7 +98,6 @@ class ConcreteReport(BuilderReport):
                 p_tag.string.replace_with(date_iso)
 
         html = self._soup.prettify()
-        print(html)
 
     def produce_contact_information(self) -> None:
         pass
@@ -150,15 +147,9 @@ if __name__ == '__main__':
     director.build_logo()
     director.build_date()
 
-    # print(builder.soup)
+    html = builder.soup
 
+    with open('/tmp/file.html', 'w') as f:
+        file = f.write(html.prettify())
 
-
-    # report = GenerateReport(False, 'logo', 'name', '')
-    # # my_report = report.add_content()
-
-    # logo = report.add_logo()
-
-    # print(logo)
-
-    # # report.create_pdf()
+    pdfkit.from_file('/tmp/file.html', 'micro.pdf')
