@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pdfkit
 import bs4
 
@@ -81,13 +83,24 @@ class ConcreteReport(BuilderReport):
 
         img[0]['src'] = "../../../assets/logo.avif"
 
-
         html = self._soup.prettify()
 
         self.report.add(html)
 
     def produce_date(self) -> None:
-        pass
+        date = self._soup.find_all("div")
+        date_now = datetime.today()
+
+        # Transform date format ISO
+        date_iso = date_now.strftime("%Y-%m-%d")
+
+        for div in date:
+            if div["class"] == ["fecha"]:
+                p_tag = div.find("p")
+                p_tag.string.replace_with(date_iso)
+
+        html = self._soup.prettify()
+        print(html)
 
     def produce_contact_information(self) -> None:
         pass
@@ -117,6 +130,9 @@ class Director:
 
     def build_logo(self, logo: str = None):
         self.report.produce_logo(logo)
+
+    def build_date(self):
+        self.report.produce_date()
 
 
 class GenerateReport:
@@ -206,8 +222,9 @@ if __name__ == '__main__':
     # Build pdf
 
     director.build_logo()
+    director.build_date()
 
-    print(builder.soup)
+    # print(builder.soup)
 
 
 
