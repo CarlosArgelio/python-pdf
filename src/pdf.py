@@ -6,27 +6,31 @@ import bs4
 class BuilderReport():
 
     @property
-    def logo(self) -> None:
+    def produce_logo(self) -> None:
         pass
 
     @property
-    def date(self) -> None:
+    def produce_date(self) -> None:
         pass
 
     @property
-    def contact_information(self) -> None:
+    def produce_front_page(self) -> None:
         pass
 
     @property
-    def paginate(self) -> None:
+    def produce_contact_information(self) -> None:
         pass
 
     @property
-    def watermark(self) -> None:
+    def produce_paginate(self) -> None:
         pass
 
     @property
-    def report_information(self) -> None:
+    def produce_watermark(self) -> None:
+        pass
+
+    @property
+    def produce_report_information(self) -> None:
         pass
 
 
