@@ -1,6 +1,96 @@
 import pdfkit
 import bs4
 
+class BuilderReport():
+
+    @property
+    def logo(self) -> None:
+        pass
+
+    @property
+    def date(self) -> None:
+        pass
+
+    @property
+    def contact_information(self) -> None:
+        pass
+
+    @property
+    def paginate(self) -> None:
+        pass
+
+    @property
+    def watermark(self) -> None:
+        pass
+
+    @property
+    def report_information(self) -> None:
+        pass
+
+
+class Report():
+
+    def __init__(self) -> None:
+        self.report = []
+
+    def add(self) -> None:
+        pass
+
+    def __str__(self) -> None:
+        return str()
+
+
+class ConcreteReport(BuilderReport):
+
+    def __init__(self) -> None:
+        self.reset()
+
+    def reset(self) -> None:
+        self._report = Report()
+
+    @property
+    def report(self) -> Report:
+
+        report = self._report
+        self.reset()
+        return report
+
+    def produce_logo(self) -> None:
+        pass
+
+    def produce_date(self) -> None:
+        pass
+
+    def produce_contact_information(self) -> None:
+        pass
+
+    def produce_paginate(self) -> None:
+        pass
+
+    def produce_watermark(self) -> None:
+        pass
+
+    def produce_report_information(self) -> None:
+        pass
+
+
+class Director:
+
+    def __init__(self) -> None:
+        self._report = None
+
+    @property
+    def report(self) -> BuilderReport:
+        return self._report
+
+    @report.setter
+    def report(self, builder: BuilderReport) -> None:
+        self._report = builder
+
+    def build_report(self):
+        pass
+
+
 class GenerateReport:
     def __init__(self, watermark: bool, logo, name, info) -> None:
         self.watermark = watermark
@@ -12,11 +102,11 @@ class GenerateReport:
             file = f.read()
 
         self.html = file
-    
+
     def soup_parse(self):
         soup = bs4.BeautifulSoup(self.html, "html.parser")
         return soup
-    
+
     def get_label(self, label, value):
         pass
 
@@ -72,7 +162,7 @@ class GenerateReport:
             h1_tag = bs4.BeautifulSoup.new_tag(soup, "h1")
             h1_tag.string = "Informe"
             soup.body.insert(0, h1_tag)
-        
+
         html = soup.prettify()
 
         return html
@@ -86,7 +176,7 @@ class GenerateReport:
 
 
 if __name__ == '__main__':
-    
+
     report = GenerateReport(False, 'logo', 'name', '')
     # my_report = report.add_content()
 
