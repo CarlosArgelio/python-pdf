@@ -41,13 +41,21 @@
       width: 100px;
       height: 100px;
     }
+    h1.title {
+      text-align: center;
+      color: #ccc;
+      font-size: 20px;
+      font-weight: bold;
+    }
     footer {
-      position: relative;
+      position: fixed;
       bottom: 0;
       left: 0;
       width: 100%;
       height: 100px;
       background-color: #fff;
+      z-index: 9999;
+      margin-top: -100px;
     }
     .datos-contacto {
       position: absolute;
@@ -71,12 +79,15 @@
  </head>
  <body>
   <header>
-   <img class="logo" src="../../assets/logo.avif"/>
+   <img class="logo" src="../../../assets/logo.avif"/>
    <div class="fecha">
-    2023-03-08
+    <p>
+     2023-10-17
+    </p>
    </div>
   </header>
   <main>
+    <h1 class="title">Hello</h1>
   </main>
   <footer>
    <div class="datos-contacto">
