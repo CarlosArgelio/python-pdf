@@ -1,7 +1,11 @@
 from datetime import datetime
+from uuid import uuid4
 
 import pdfkit
 import bs4
+
+from config import config
+
 
 class BuilderReport():
 
@@ -38,7 +42,7 @@ class Report():
 
     def __init__(self) -> None:
 
-        with open('/home/carlos/work/projects/python/pdf/src/templates/reports/index.html', 'r') as f:
+        with open(f'{config.get("route")}/src/templates/reports/index.html', 'r') as f:
             file = f.read()
 
         self.report = file
@@ -53,15 +57,22 @@ class Report():
 class ConcreteReport(BuilderReport):
 
     def __init__(self) -> None:
-        self.reset()
+        # self.reset()
+        self.loads = {}
 
-    def reset(self) -> None:
         self._report = Report()
 
-        with open('/home/carlos/work/projects/python/pdf/src/index.html', 'r') as f:
+        with open(f'{config.get("route")}/src/index.html', 'r') as f:
             report = f.read()
 
         self._soup = bs4.BeautifulSoup(report, "html.parser")
+
+    # def reset(self) -> None:
+    #     self._report = Report()
+
+    #     with open(f'{config.get("route")}/src/index.html', 'r') as f:
+    #         report = f.read()
+
 
     @property
     def soup(self):
@@ -75,15 +86,34 @@ class ConcreteReport(BuilderReport):
     def report(self) -> Report:
 
         report = self._report
-        self.reset()
+        # self.reset()
         return report
+
+    # @classmethod
+    def load_file_tmp(self, type_file: str, route):
+
+        # base_route = f'/tmp/{str(uuid4())}'
+        # filename = route.split('/')[-1]
+
+        # filename_tmp = f'{base_route}/{filename}'
+
+        # with open(route, 'rb') as f:
+        #     file = f.read()
+
+        # with open(filename_tmp, 'wb') as f:
+        #     f.write(file)
+
+        self.loads['route'] = route
 
     def produce_logo(self, image: str = None) -> None:
         img = self._soup.find_all("img")
         if image is not None:
             img[0]['src'] = image
 
-        img[0]['src'] = "../../../assets/logo.avif"
+        try:
+            img[0]['src'] = self.loads['route']
+        except KeyError as e:
+            raise Exception('Add route image')
 
         html = self._soup.prettify()
 
@@ -154,15 +184,17 @@ if __name__ == '__main__':
     director.report = builder
 
     # Build pdf
-
+    builder.load_file_tmp('type', f'{config.get("route")}/assets/logo.avif')
     director.build_test_report()
 
     html = builder.soup
 
-    # with open('/tmp/file.html', 'w') as f:
-    #     file = f.write(html.prettify())
+    # print(html.prettify())
 
-    # with open('/tmp/file.html', 'r') as f:
-    #     f.read()
+    with open('/tmp/file.html', 'w') as f:
+        file = f.write(html.prettify())
 
-    # pdfkit.from_file('/tmp/file.html', 'micro.pdf')
+    with open('/tmp/file.html', 'r') as f:
+        f.read()
+
+    pdfkit.from_file('/tmp/file.html', 'micro.pdf')
